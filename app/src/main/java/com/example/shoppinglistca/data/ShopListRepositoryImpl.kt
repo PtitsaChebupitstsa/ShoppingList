@@ -1,10 +1,13 @@
 package com.example.shoppinglistca.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.shoppinglistca.domain.ShopItem
 import com.example.shoppinglistca.domain.ShopListRepository
 import java.lang.RuntimeException
 
 object ShopListRepositoryImpl : ShopListRepository {
+    private val shopListLD = MutableLiveData<List<ShopItem>>()
 
     private val shopList = mutableListOf<ShopItem>()
 
@@ -19,12 +22,14 @@ object ShopListRepositoryImpl : ShopListRepository {
     override fun addShopItem(shopItem: ShopItem) {
         if (shopItem.id == ShopItem.UNDEFINED_ID) {
             shopItem.id = autoIncrementId++
-            shopList.add(shopItem)
         }
+            shopList.add(shopItem)
+            updateList()
+
     }
 
-    override fun getShopList(): List<ShopItem> {
-        return shopList.toList()
+    override fun getShopList(): LiveData<List<ShopItem>> {
+        return shopListLD
     }
 
     override fun getShopItem(shopItemId: Int): ShopItem {
@@ -34,11 +39,16 @@ object ShopListRepositoryImpl : ShopListRepository {
 
     override fun editShopItem(shopItem: ShopItem) {
        val oldShopItem = getShopItem(shopItem.id)
-        deleteShopItem(oldShopItem)
+        shopList.remove(oldShopItem)
         addShopItem(shopItem)
     }
 
     override fun deleteShopItem(shopItem: ShopItem) {
         shopList.remove(shopItem)
+        updateList()
+    }
+
+    private fun updateList(){
+        shopListLD.value= shopList.toList()
     }
 }

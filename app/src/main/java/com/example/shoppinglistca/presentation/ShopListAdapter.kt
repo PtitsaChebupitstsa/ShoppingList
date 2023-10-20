@@ -1,30 +1,13 @@
 package com.example.shoppinglistca.presentation
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.example.shoppinglistca.R
 import com.example.shoppinglistca.domain.ShopItem
 
-class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>() {
-    var count = 0
-
-    var shopList = listOf<ShopItem>()
-        set(value) {
-            val callback = ShopListDiffCallback(shopList, value)
-            val diffResult = DiffUtil.calculateDiff(callback)
-            diffResult.dispatchUpdatesTo(this)
-            field = value
-            //  notifyDataSetChanged() замена на ShopListDiffCallback() : DiffUtil.Callback(){
-            //  val callback = ShopListDiffCallback(shopList,value)
-            //      val diffResult = DiffUtil.calculateDiff(callback)
-            //      diffResult.dispatchUpdatesTo(this)
-            //      field = value <-обновление списка }
-        }
+//class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>() { замена наследования на ListAdapter
+class ShopListAdapter : ListAdapter<ShopItem,ShopItemViewHolder>(ShopItemDiffCallback()) {
 
     var onShopItemLongClickListener: ((ShopItem) -> Unit)? = null
     var onShopItemClickListener: ((ShopItem) -> Unit)? = null
@@ -33,7 +16,6 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
         const val ENABLE_OBJ = 1
         const val DISABLE_OBJ = 0
         const val MAX_POOL_SIZE = 15
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopItemViewHolder {
@@ -49,10 +31,10 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
         return ShopItemViewHolder(view)
     }
 
-
     override fun onBindViewHolder(viewHolder: ShopItemViewHolder, position: Int) {
-        Log.d("ShopListAdapter", "onBindViewHolder,count:${++count}")
-        val shopItem = shopList[position]
+
+        val shopItem = getItem(position) //shopList[position] после замены на ListAdapter если нам нужно получить
+        //эллемент по его позиции то используем getItem
         viewHolder.tvName.text = "${shopItem.name}"
         viewHolder.tvCount.text = shopItem.count.toString()
 
@@ -68,12 +50,8 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
 
     }
 
-    override fun onViewRecycled(viewHolder: ShopItemViewHolder) {
-        super.onViewRecycled(viewHolder)
-    }
-
     override fun getItemViewType(position: Int): Int {
-        val item = shopList[position]
+        val item = getItem(position)
         return if (item.enabled) {
             ENABLE_OBJ
         } else {
@@ -81,21 +59,11 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
         }
     }
 
-    //    override fun getItemViewType(position: Int): Int {
-//        return position
-    // проверяет позицию обьекта и уже имеющегося вьюхолдера и они конечно не совпадают и создается
-    //новый...по этому position не используй...а так используется где то 16 так как 8 на создается сразу
-    //и еще 8 создаются с красным цветом
-//    }
+//    override fun getItemCount(): Int {
+//        return shopList.size
+//    } в ListAdapter этот метод можно не переопредилять
 
-    override fun getItemCount(): Int {
-        return shopList.size
-    }
 
-    class ShopItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val tvName = view.findViewById<TextView>(R.id.tv_name)
-        val tvCount = view.findViewById<TextView>(R.id.tv_count)
-    }
 
 
 }

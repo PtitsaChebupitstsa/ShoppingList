@@ -23,14 +23,10 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this) {
-
-          shopListAdapter.shopList= it
-
+            shopListAdapter.shopList = it
         }
 
     }
-
-
 
     private fun setupRecyclerView() {
         val rvShopList = findViewById<RecyclerView>(R.id.rv_shop_list)

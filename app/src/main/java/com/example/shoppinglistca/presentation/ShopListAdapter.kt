@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.ListAdapter
 import com.example.shoppinglistca.R
 import com.example.shoppinglistca.domain.ShopItem
 
-//class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>() { замена наследования на ListAdapter
 class ShopListAdapter : ListAdapter<ShopItem,ShopItemViewHolder>(ShopItemDiffCallback()) {
 
     var onShopItemLongClickListener: ((ShopItem) -> Unit)? = null
@@ -33,8 +32,7 @@ class ShopListAdapter : ListAdapter<ShopItem,ShopItemViewHolder>(ShopItemDiffCal
 
     override fun onBindViewHolder(viewHolder: ShopItemViewHolder, position: Int) {
 
-        val shopItem = getItem(position) //shopList[position] после замены на ListAdapter если нам нужно получить
-        //эллемент по его позиции то используем getItem
+        val shopItem = getItem(position)
         viewHolder.tvName.text = "${shopItem.name}"
         viewHolder.tvCount.text = shopItem.count.toString()
 
@@ -47,7 +45,6 @@ class ShopListAdapter : ListAdapter<ShopItem,ShopItemViewHolder>(ShopItemDiffCal
             true
         }
 
-
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -58,12 +55,5 @@ class ShopListAdapter : ListAdapter<ShopItem,ShopItemViewHolder>(ShopItemDiffCal
             DISABLE_OBJ
         }
     }
-
-//    override fun getItemCount(): Int {
-//        return shopList.size
-//    } в ListAdapter этот метод можно не переопредилять
-
-
-
 
 }

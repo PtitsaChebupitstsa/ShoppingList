@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this) {
-            shopListAdapter.submitList(it) //  shopListAdapter.shopList = it что бы установить новый список в ListAdapter необходимо вызвать метот submitList(it)
+            shopListAdapter.submitList(it)
         }
 
     }
@@ -63,8 +63,6 @@ class MainActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val item = shopListAdapter.currentList[viewHolder.adapterPosition]
-                //что бы понять какой эллемент удалить меняем val item = shopListAdapter.shopList[viewHolder.adapterPosition] на currentList
-                //что бы получить текщий список эллементов в адаптере то можно вызвать метод currentList
                 viewModel.deleteShopItem(item)
             }
         }

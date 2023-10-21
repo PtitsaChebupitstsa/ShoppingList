@@ -1,6 +1,7 @@
 package com.example.shoppinglistca.presentation
 
 import android.accessibilityservice.AccessibilityService.SoftKeyboardController.OnShowModeChangedListener
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,11 +12,14 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglistca.R
 import com.example.shoppinglistca.domain.ShopItem
+import com.example.shoppinglistca.presentation.ShopItemActivity.Companion.newIntentEditItem
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var shopListAdapter: ShopListAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +29,17 @@ class MainActivity : AppCompatActivity() {
         viewModel.shopList.observe(this) {
             shopListAdapter.submitList(it)
         }
-
+//
+        val buttonAddItem = findViewById<FloatingActionButton>(R.id.button_add_shop_item)
+        buttonAddItem.setOnClickListener {
+//              не рекомендованный метод
+//            val intent = Intent(this,ShopItemActivity::class.java)
+//            intent.putExtra(EXTRA_SCREEN_MODE, MODE_ADD)
+//            startActivity(intent)
+            val intent = ShopItemActivity.newIntentAddMItem(this)
+            startActivity(intent)
+        }
+//
     }
 
     private fun setupRecyclerView() {
@@ -73,6 +87,8 @@ class MainActivity : AppCompatActivity() {
     private fun setupClickListener() {
         shopListAdapter.onShopItemClickListener = {
             Log.d("MainActivity", "Item id: ${it.id}")
+            val intent = ShopItemActivity.newIntentEditItem(this,it.id)
+            startActivity(intent)
         }
     }
 

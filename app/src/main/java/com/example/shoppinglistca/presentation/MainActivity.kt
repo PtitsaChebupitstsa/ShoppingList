@@ -29,17 +29,12 @@ class MainActivity : AppCompatActivity() {
         viewModel.shopList.observe(this) {
             shopListAdapter.submitList(it)
         }
-//
+
         val buttonAddItem = findViewById<FloatingActionButton>(R.id.button_add_shop_item)
         buttonAddItem.setOnClickListener {
-//              не рекомендованный метод
-//            val intent = Intent(this,ShopItemActivity::class.java)
-//            intent.putExtra(EXTRA_SCREEN_MODE, MODE_ADD)
-//            startActivity(intent)
             val intent = ShopItemActivity.newIntentAddMItem(this)
             startActivity(intent)
         }
-//
     }
 
     private fun setupRecyclerView() {

@@ -3,4 +3,6 @@
     <string name="count">Count:</string>
     <string name="save">Сохранить</string>
     <string name="name">Name:</string>
+    <string name="error_input_count">Введите число</string>
+    <string name="error_input_name">Введите имя</string>
 </resources>

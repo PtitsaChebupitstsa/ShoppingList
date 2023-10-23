@@ -71,8 +71,18 @@ private fun observeViewModel(){
         }
         tilName.error = message
     }
+//    viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
+//        finish()
+//   у фрагментов нет метода finish есть метот onBackPressed() который работает так как будто вы сами нажали на кнопку назад на телефоне
+
     viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
-        finish()
+        //что бы получить ссылку на активити к который прикреплен фрагмент можно вызвать метод activity или requireActivity()
+        //они отличаются что activity возрашает нулабельный обьект и если у него нужно вызвать какие то методы то нужно вызывать
+        // проверку ?на налл а requireActivity() возврашает не нулабельный обьект.Здесь проблемма заключается в том что если мы в
+        // фрагменте обращаемся к activity то можем сделать это когда фрагмент еще не прикреплен к активити или уже был удален
+        // requireActivity не безопасный метод!
+        activity?.onBackPressed()
+      //  requireActivity()
     }}
 
     private fun parseParams() {
@@ -159,8 +169,13 @@ private fun observeViewModel(){
 
         }
 
-
-
+//статический фабричный метод для передачи фрагмента
+fun newInstanceAddItem():ShopItemFragment{
+    return ShopItemFragment(MODE_ADD)
+}
+        fun newInstanceEditItem(shopItemId: Int):ShopItemFragment{//статический фабричный метод для передачи фрагмента
+            return ShopItemFragment(MODE_EDIT,shopItemId)
+        }
 
             fun newIntentEditItem(context: Context, shopItemId: Int): Intent {
                 val intent = Intent(context, ShopItemActivity::class.java)

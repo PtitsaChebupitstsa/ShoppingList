@@ -11,8 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglistca.R
-import com.example.shoppinglistca.domain.ShopItem
-import com.example.shoppinglistca.presentation.ShopItemActivity.Companion.newIntentEditItem
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {

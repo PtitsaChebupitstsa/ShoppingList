@@ -20,7 +20,9 @@ class ShopItemActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shop_item)
         parseIntent()
-        launchRightMode()
+        if (savedInstanceState==null) {
+            launchRightMode()
+        }
     }
 
 
@@ -33,7 +35,7 @@ class ShopItemActivity : AppCompatActivity() {
         }
         //установка фрагмента в контейнеро
         supportFragmentManager.beginTransaction()
-            .add(R.id.shop_item_container, fragment)
+            .replace(R.id.shop_item_container, fragment)
             .commit()//запуск
     }
 

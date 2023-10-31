@@ -34,7 +34,7 @@ class ShopItemFragment() : Fragment() {
     }
 
     override fun onCreateView(
-        //onCreateView нужен для того что бы из макета создать view
+
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,8 +45,6 @@ class ShopItemFragment() : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //момент в который мы будем уверены что это view точно создано(onViewCreated вызывается когда view уже точно будет создано и начиная с этого метода можно начинать работать с view )
-        //без каких либо ограничений
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[ShopItemViewModel::class.java]
         initViews(view)//важно
@@ -73,25 +71,12 @@ class ShopItemFragment() : Fragment() {
             }
             tilName.error = message
         }
-//    viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
-//        finish()
-//   у фрагментов нет метода finish есть метот onBackPressed() который работает так как будто вы сами нажали на кнопку назад на телефоне
-
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
-            //что бы получить ссылку на активити к который прикреплен фрагмент можно вызвать метод activity или requireActivity()
-            //они отличаются что activity возрашает нулабельный обьект и если у него нужно вызвать какие то методы то нужно вызывать
-            // проверку ?на налл а requireActivity() возврашает не нулабельный обьект.Здесь проблемма заключается в том что если мы в
-            // фрагменте обращаемся к activity то можем сделать это когда фрагмент еще не прикреплен к активити или уже был удален
-            // requireActivity не безопасный метод!
             activity?.onBackPressed()
-
-
-            //  requireActivity()
         }
     }
 
     private fun parseParams() {
-        //этот метод вызывается что бы проверить что все параметры были правильно переданы в фрагмент
         val args = requireArguments()
         if (!args.containsKey(SCREEN_MODE)) {
             throw RuntimeException("Param screen mode is absent")
@@ -131,7 +116,6 @@ class ShopItemFragment() : Fragment() {
 
         })
         etCount.addTextChangedListener(object : TextWatcher {
-            //скрываем осообщение об ошибке при наборе текста
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -154,10 +138,6 @@ class ShopItemFragment() : Fragment() {
     }
 
     private fun launchEditMode() {
-        // в нутри фрагмента в место this " viewModel.shopItem.observe(this)" нужно передать viewLifecycleOwner
-        // это происходит вот по какой причине: обычно в нутре observe мы работаем с какими то view эллементамми и если вдруг view больше не существует
-        // то необходимо отписатся от этой LiveData благодаря viewLifecycleOwner это происходит автоматически (ибо может быт так что view уже умерла а фрагмент все еще жив)
-        // и из за этого у нас может быть краш и по этому теперь пердается в место this используется viewLifecycleOwner так как она использует жизненый цикл фрагмента а не вью
         viewModel.getShopItem(shopItemId)
         viewModel.shopItem.observe(viewLifecycleOwner) {
             etName.setText(it.name)
@@ -166,6 +146,7 @@ class ShopItemFragment() : Fragment() {
         saveButton.setOnClickListener {
             viewModel.editShopItem(etName.text?.toString(), etCount.text?.toString())
         }
+
     }
 
     companion object {
@@ -175,8 +156,6 @@ class ShopItemFragment() : Fragment() {
         private const val MODE_ADD = "mode_add"
         private const val MODE_UNKNOWN = ""
 
-
-        //статический фабричный метод для передачи фрагмента
         fun newInstanceAddItem(): ShopItemFragment {
             Bundle().apply {
                    return ShopItemFragment().apply {
@@ -201,7 +180,6 @@ class ShopItemFragment() : Fragment() {
     }
 
     private fun initViews(view: View) {
-        //у фрагмента нет метода findViewById
         tilName = view.findViewById(R.id.til_name)
         tilCount = view.findViewById(R.id.til_count)
         etName = view.findViewById(R.id.et_name)

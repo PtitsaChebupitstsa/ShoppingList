@@ -33,7 +33,7 @@ class ShopListAdapter : ListAdapter<ShopItem,ShopItemViewHolder>(ShopItemDiffCal
     override fun onBindViewHolder(viewHolder: ShopItemViewHolder, position: Int) {
 
         val shopItem = getItem(position)
-        viewHolder.tvName.text = "${shopItem.name}"
+        viewHolder.tvName.text = shopItem.name
         viewHolder.tvCount.text = shopItem.count.toString()
 
         viewHolder.view.setOnClickListener {

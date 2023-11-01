@@ -13,7 +13,7 @@ import com.example.shoppinglistca.domain.ShopItem.Companion.UNDEFINED_ID
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
-class ShopItemActivity : AppCompatActivity() {
+class ShopItemActivity : AppCompatActivity(),ShopItemFragment.Companion.OnEditingFinishListener{
     private var screenMode = MODE_UNKNOWN
     private var shopItemId = UNDEFINED_ID
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +79,10 @@ class ShopItemActivity : AppCompatActivity() {
 
 
         }
+    }
+
+    override fun onEditingFinish() {
+        finish()
     }
 
 }

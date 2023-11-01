@@ -1,5 +1,6 @@
 package com.example.shoppinglistca.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,8 +18,9 @@ import com.google.android.material.textfield.TextInputLayout
 
 class ShopItemFragment() : Fragment() {
 
-    lateinit var viewModel: ShopItemViewModel
+     private lateinit var onEditingFinishListener:OnEditingFinishListener
 
+    lateinit var viewModel: ShopItemViewModel
     lateinit var tilName: TextInputLayout
     lateinit var tilCount: TextInputLayout
     lateinit var etName: TextInputEditText
@@ -27,6 +29,16 @@ class ShopItemFragment() : Fragment() {
 
     private var screenMode = MODE_UNKNOWN
     private var shopItemId = UNDEFINED_ID
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnEditingFinishListener){
+            onEditingFinishListener= context
+        } else{
+            throw RuntimeException("Activity must implement OnEditingFinishListener")
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +84,8 @@ class ShopItemFragment() : Fragment() {
             tilName.error = message
         }
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
-            activity?.onBackPressed()
+            onEditingFinishListener.onEditingFinish()
+          //  activity?.onBackPressed()
         }
     }
 
@@ -156,6 +169,10 @@ class ShopItemFragment() : Fragment() {
         private const val MODE_ADD = "mode_add"
         private const val MODE_UNKNOWN = ""
 
+
+        interface OnEditingFinishListener{
+            fun onEditingFinish()
+        }
         fun newInstanceAddItem(): ShopItemFragment {
             Bundle().apply {
                    return ShopItemFragment().apply {

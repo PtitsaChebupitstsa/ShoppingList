@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainer
 import androidx.fragment.app.FragmentContainerView
@@ -17,7 +18,7 @@ import com.example.shoppinglistca.R
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() ,ShopItemFragment.Companion.OnEditingFinishListener{
 
     private lateinit var viewModel: MainViewModel
     private lateinit var shopListAdapter: ShopListAdapter
@@ -127,6 +128,12 @@ class MainActivity : AppCompatActivity() {
             viewModel.changeEnableState(it)
         }
     }
+
+    override fun onEditingFinish() {
+        Toast.makeText(this@MainActivity,"Success",Toast.LENGTH_SHORT).show()
+        supportFragmentManager.popBackStack()
+    }
+
 
 }
 

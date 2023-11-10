@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <variable
+            name="shopItem"
+            type="com.example.shoppinglistca.domain.ShopItem" />
+    </data>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -23,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="20sp"
-            tools:text="Салфетки"
+            tools:text="@{shopItem.name}"
             android:textStyle="bold"
             android:textColor="@color/white"/>
 
@@ -32,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            tools:text="1"
+            tools:text="@{String.valueOf(shopItem.count)}"
             android:paddingRight="10dp"
             android:textStyle="bold"
             android:textColor="@color/white"

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <variable
+            name="shopItem"
+            type="com.example.shoppinglistca.domain.ShopItem" />
+    </data>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -24,20 +29,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/white"
             android:textSize="20sp"
+            tools:text="@{shopItem.name}"
             android:textStyle="bold"
-            tools:text="Салфетки" />
+            android:textColor="@color/white"/>
 
         <TextView
             android:id="@+id/tv_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:textSize="20sp"
-            android:textStyle="bold"
+            tools:text="@{String.valueOf(shopItem.count)}"
             android:paddingRight="10dp"
-            tools:text="1" />
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.cardview.widget.CardView>

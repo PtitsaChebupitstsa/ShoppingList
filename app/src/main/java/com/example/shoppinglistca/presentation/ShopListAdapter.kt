@@ -47,12 +47,10 @@ class ShopListAdapter : ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCa
         when(binding){//явный апкаст
             is ItemShopDisabledBinding->{
                 //это не одинаковые строки и тут не дублирование
-                binding.tvName.text = shopItem.name
-                binding.tvCount.text = shopItem.count.toString()
+         binding.shopItem= shopItem
             }
             is ItemShopEnabledBinding->{
-                binding.tvName.text = shopItem.name
-                binding.tvCount.text = shopItem.count.toString()
+                binding.shopItem= shopItem
             }
         }
 

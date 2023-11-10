@@ -2,9 +2,12 @@ package com.example.shoppinglistca.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
 import com.example.shoppinglistca.R
 import com.example.shoppinglistca.databinding.ItemShopDisabledBinding
+import com.example.shoppinglistca.databinding.ItemShopEnabledBinding
 import com.example.shoppinglistca.domain.ShopItem
 
 class ShopListAdapter : ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCallback()) {
@@ -25,11 +28,13 @@ class ShopListAdapter : ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCa
             DISABLE_OBJ -> R.layout.item_shop_disabled
             else -> throw RuntimeException("Unknown view type: $viewType")
         }
-        val binding = ItemShopDisabledBinding
-            .inflate(
-                LayoutInflater.from(parent.context),
-                parent, false
-            )
+        val binding = DataBindingUtil.inflate<ViewDataBinding>(
+            LayoutInflater.from(parent.context),
+            layout,
+            parent,
+            false
+        )
+
 
         return ShopItemViewHolder(binding)
     }
@@ -38,8 +43,18 @@ class ShopListAdapter : ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCa
 
         val shopItem = getItem(position)
         val binding= viewHolder.binding
-        binding.tvName.text = shopItem.name
-        binding.tvCount.text = shopItem.count.toString()
+
+        when(binding){//явный апкаст
+            is ItemShopDisabledBinding->{
+                //это не одинаковые строки и тут не дублирование
+                binding.tvName.text = shopItem.name
+                binding.tvCount.text = shopItem.count.toString()
+            }
+            is ItemShopEnabledBinding->{
+                binding.tvName.text = shopItem.name
+                binding.tvCount.text = shopItem.count.toString()
+            }
+        }
 
         binding.root.setOnClickListener {
             onShopItemClickListener?.invoke(shopItem)

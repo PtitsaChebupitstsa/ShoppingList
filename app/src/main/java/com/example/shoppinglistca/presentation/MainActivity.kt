@@ -15,10 +15,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglistca.R
+import com.example.shoppinglistca.databinding.ItemShopEnabledBinding
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() ,ShopItemFragment.Companion.OnEditingFinishListener{
+
+
 
     private lateinit var viewModel: MainViewModel
     private lateinit var shopListAdapter: ShopListAdapter
@@ -28,9 +31,9 @@ class MainActivity : AppCompatActivity() ,ShopItemFragment.Companion.OnEditingFi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //
+
         shopItemContainer = findViewById(R.id.shop_item_container)
-        //
+
 
         setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]

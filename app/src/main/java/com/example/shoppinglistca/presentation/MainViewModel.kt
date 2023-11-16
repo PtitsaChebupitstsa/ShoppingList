@@ -1,16 +1,17 @@
 package com.example.shoppinglistca.presentation
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+
 import com.example.shoppinglistca.data.ShopListRepositoryImpl
 import com.example.shoppinglistca.domain.DeleteShopItemUseCase
 import com.example.shoppinglistca.domain.EditShopItemUseCase
 import com.example.shoppinglistca.domain.GetShopListUseCase
 import com.example.shoppinglistca.domain.ShopItem
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = ShopListRepositoryImpl
+    private val repository = ShopListRepositoryImpl(application)
     /*
     Не правильная реализация репозитория связана с тем что нужно изучить инекцию зависимости
     Нарушение заключается в том что Presentation слой не должен ничего занать о Data слое

@@ -2,11 +2,9 @@ package com.example.shoppinglistca.data
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import com.example.shoppinglistca.domain.ShopItem
 import com.example.shoppinglistca.domain.ShopListRepository
-import java.lang.RuntimeException
-import kotlin.random.Random
 
 class ShopListRepositoryImpl(application: Application) : ShopListRepository {
     private val shopListDao = AppDatabase.getInstance(application).shopListDao()
@@ -15,8 +13,13 @@ class ShopListRepositoryImpl(application: Application) : ShopListRepository {
         shopListDao.addShopItem(mapper.mapEntityToDbModel(shopItem))
     }
 
-    override fun getShopList(): LiveData<List<ShopItem>> = shopListDao.getShopList()
-
+    /*  преобразование с помошью MediatorLiveData который перехватывает LiveData но если мы т
+    олько преобразуем то используй map
+    override fun getShopList(): LiveData<List<ShopItem>> = MediatorLiveData<List<ShopItem>>().apply {
+    addSource(shopListDao.getShopList()){mapper.mapListDbModelToEntity(it) }}} второй вариант ниже ≥≥≥≥*/
+    override fun getShopList(): LiveData<List<ShopItem>> = shopListDao.getShopList().map {
+        mapper.mapListDbModelToEntity(it)
+    }
     override fun getShopItem(shopItemId: Int): ShopItem {
         return mapper.mapDbModelToEntity(shopListDao.getShopItem(shopItemId))
     }

@@ -19,18 +19,27 @@ import com.example.shoppinglistca.databinding.ActivityMainBinding
 import com.example.shoppinglistca.databinding.ItemShopEnabledBinding
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), ShopItemFragment.Companion.OnEditingFinishListener {
-
     private lateinit var viewModel: MainViewModel
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
     private lateinit var shopListAdapter: ShopListAdapter
-    private lateinit var binding: ActivityMainBinding
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    private val component by lazy {
+        (application as ShopListApp).component
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        component.inject(this)
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-            setupRecyclerView()
+        setupRecyclerView()
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.shopList.observe(this) {
             shopListAdapter.submitList(it)
@@ -45,10 +54,6 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.Companion.OnEditingFi
         }
     }
 
-//    override fun onEditingFinished() {
-//        Toast.makeText(this@MainActivity, "Success", Toast.LENGTH_SHORT).show()
-//        supportFragmentManager.popBackStack()
-//    }
 
     private fun isOnePaneMode(): Boolean {
         return binding.shopItemContainer == null
@@ -119,8 +124,9 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.Companion.OnEditingFi
             viewModel.changeEnableState(it)
         }
     }
+
     override fun onEditingFinish() {
-      Toast.makeText(this@MainActivity,"Success",Toast.LENGTH_SHORT).show()
-       supportFragmentManager.popBackStack()
-   }
+        Toast.makeText(this@MainActivity, "Success", Toast.LENGTH_SHORT).show()
+        supportFragmentManager.popBackStack()
+    }
 }

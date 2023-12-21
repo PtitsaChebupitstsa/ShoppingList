@@ -17,6 +17,7 @@ import com.example.shoppinglistca.databinding.FragmentShopItemBinding
 import com.example.shoppinglistca.domain.ShopItem.Companion.UNDEFINED_ID
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import javax.inject.Inject
 
 class ShopItemFragment() : Fragment() {
 
@@ -30,7 +31,15 @@ class ShopItemFragment() : Fragment() {
     private val binding:FragmentShopItemBinding
         get() = _binding?:throw java.lang.RuntimeException("ShopItemFragment ==null")
 
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as ShopListApp).component
+    }
     override fun onAttach(context: Context) {
+        component.inject(this)
         super.onAttach(context)
         if (context is OnEditingFinishListener){
             onEditingFinishListener= context

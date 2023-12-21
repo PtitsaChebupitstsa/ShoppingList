@@ -5,18 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.example.shoppinglistca.domain.ShopItem
 import com.example.shoppinglistca.domain.ShopListRepository
+import javax.inject.Inject
 
-class ShopListRepositoryImpl(application: Application) : ShopListRepository {
-    private val shopListDao = AppDatabase.getInstance(application).shopListDao()
-    private val mapper = ShopListMapper()
+class ShopListRepositoryImpl @Inject constructor(
+  private val mapper:ShopListMapper,
+  private val shopListDao:ShopListDao
+) : ShopListRepository {
     override suspend fun addShopItem(shopItem: ShopItem) {
         shopListDao.addShopItem(mapper.mapEntityToDbModel(shopItem))
     }
 
-    /*  преобразование с помошью MediatorLiveData который перехватывает LiveData но если мы т
-    олько преобразуем то используй map
-    override fun getShopList(): LiveData<List<ShopItem>> = MediatorLiveData<List<ShopItem>>().apply {
-    addSource(shopListDao.getShopList()){mapper.mapListDbModelToEntity(it) }}} второй вариант ниже ≥≥≥≥*/
+
     override fun getShopList(): LiveData<List<ShopItem>> = shopListDao.getShopList().map {
         mapper.mapListDbModelToEntity(it)
     }

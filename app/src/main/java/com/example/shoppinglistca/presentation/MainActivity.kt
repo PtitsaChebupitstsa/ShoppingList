@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.Companion.OnEditingFi
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupRecyclerView()
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this) {
             shopListAdapter.submitList(it)
         }

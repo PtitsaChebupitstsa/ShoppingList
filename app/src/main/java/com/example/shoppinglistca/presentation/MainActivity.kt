@@ -2,6 +2,7 @@ package com.example.shoppinglistca.presentation
 
 import android.accessibilityservice.AccessibilityService.SoftKeyboardController.OnShowModeChangedListener
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -52,6 +53,15 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.Companion.OnEditingFi
                 launchFragment(ShopItemFragment.newInstanceAddItem())
             }
         }
+        //обращение к нашему Content Provider
+        contentResolver.query(
+             Uri.parse("content://com.kerugeru.shoppinglist/shop_items"),
+            null,
+            null,
+            null,
+            null,
+            null
+        )
     }
 
 

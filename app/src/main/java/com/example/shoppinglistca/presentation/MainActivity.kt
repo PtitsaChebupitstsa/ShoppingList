@@ -79,6 +79,8 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.Companion.OnEditingFi
                 )
                 Log.d("MainActivity22",shopItem.toString())
         }
+            //курсор обязательно нужно закрывать
+            cursor?.close()
     }
 }
 

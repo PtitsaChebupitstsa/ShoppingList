@@ -1,6 +1,8 @@
 package com.example.shoppinglistca.presentation
 
+import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,18 +20,20 @@ import com.example.shoppinglistca.domain.ShopItem.Companion.UNDEFINED_ID
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 class ShopItemFragment() : Fragment() {
 
-     private lateinit var onEditingFinishListener:OnEditingFinishListener
+    private lateinit var onEditingFinishListener: OnEditingFinishListener
 
     lateinit var viewModel: ShopItemViewModel
     private var screenMode = MODE_UNKNOWN
     private var shopItemId = UNDEFINED_ID
 
-    private var _binding:FragmentShopItemBinding?=null
-    private val binding:FragmentShopItemBinding
-        get() = _binding?:throw java.lang.RuntimeException("ShopItemFragment ==null")
+    private var _binding: FragmentShopItemBinding? = null
+    private val binding: FragmentShopItemBinding
+        get() = _binding ?: throw java.lang.RuntimeException("ShopItemFragment ==null")
+
 
 
     @Inject
@@ -38,12 +42,13 @@ class ShopItemFragment() : Fragment() {
     private val component by lazy {
         (requireActivity().application as ShopListApp).component
     }
+
     override fun onAttach(context: Context) {
         component.inject(this)
         super.onAttach(context)
-        if (context is OnEditingFinishListener){
-            onEditingFinishListener= context
-        } else{
+        if (context is OnEditingFinishListener) {
+            onEditingFinishListener = context
+        } else {
             throw RuntimeException("Activity must implement OnEditingFinishListener")
         }
     }
@@ -60,15 +65,15 @@ class ShopItemFragment() : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-       _binding = FragmentShopItemBinding.inflate(inflater,container,false)
-return binding.root
+        _binding = FragmentShopItemBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this,viewModelFactory)[ShopItemViewModel::class.java]
-     binding.viewModel=viewModel
-        binding.lifecycleOwner =viewLifecycleOwner
+        viewModel = ViewModelProvider(this, viewModelFactory)[ShopItemViewModel::class.java]
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         addTextChangeListener()
         launchRightMode()
         observeViewModel()
@@ -99,6 +104,7 @@ return binding.root
             shopItemId = args.getInt(SHOP_ITEM_ID, UNDEFINED_ID)
         }
     }
+
     private fun launchRightMode() {//выбор мода
         when (screenMode) {
             MODE_EDIT -> launchEditMode()
@@ -139,7 +145,21 @@ return binding.root
 
     private fun launchAddMode() {
         binding.saveButton.setOnClickListener {
-            viewModel.addShopItem(binding.etName.text?.toString(), binding.etCount.text?.toString())
+//            viewModel.addShopItem(
+//                binding.etName.text?.toString(),
+//                binding.etCount.text?.toString()
+//            )
+            thread {
+                context?.contentResolver?.insert(
+                    Uri.parse("content://com.kerugeru.shoppinglist/shop_items"),
+                    ContentValues().apply {
+                        put("id", 0)
+                        put("name", binding.etName.text?.toString())
+                        put("count", binding.etCount.text?.toString()?.toInt())
+                        put("enabled", true)
+                    }
+                )
+            }
         }
     }
 
